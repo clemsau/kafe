@@ -4,6 +4,7 @@ go 1.22.0
 
 require (
 	github.com/IBM/sarama v1.43.3
+	github.com/gdamore/tcell v1.4.0
 	github.com/rivo/tview v0.0.0-20241016194538-c5e4fb24af13
 )
 
