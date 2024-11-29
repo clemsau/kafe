@@ -8,5 +8,6 @@ type TopicInfo struct {
 	Replicas   int
 	Status     string
 	Messages   int64
+	Throughput float64
 	LastUpdate time.Time
 }

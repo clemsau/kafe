@@ -37,6 +37,7 @@ func NewTable(app *ui.App, client *kafka.Client, cache *models.TopicCache) *Tabl
 			"Replicas",
 			"Status",
 			"Messages",
+			"Throughput (msg/s)",
 		},
 	}
 
@@ -92,6 +93,7 @@ func (t *Table) UpdateTable(topics []models.TopicInfo) {
 			fmt.Sprintf("%d", topic.Replicas),
 			topic.Status,
 			fmt.Sprintf("%d", topic.Messages),
+			fmt.Sprintf("%.1f", topic.Throughput),
 		}
 
 		for col, content := range cells {
@@ -134,7 +136,8 @@ func (t *Table) StartMonitoring() {
 
 // monitorTopics periodically fetches topic information
 func (t *Table) monitorTopics() {
-	ticker := time.NewTicker(2 * time.Second)
+	tickRateSeconds := 2
+	ticker := time.NewTicker(time.Duration(tickRateSeconds) * time.Second)
 	defer ticker.Stop()
 
 	for range ticker.C {
@@ -167,6 +170,14 @@ func (t *Table) monitorTopics() {
 					log.Printf("Error fetching info for topic %s: %v", topic, err)
 					continue
 				}
+
+				if prev, exists := t.cache.GetPreviousMessages(topic); exists {
+					messageDelta := info.Messages - prev
+					info.Throughput = float64(messageDelta) / float64(tickRateSeconds)
+				}
+
+				t.cache.SetPreviousMessages(topic, info.Messages)
+
 				info.LastUpdate = time.Now()
 				t.cache.UpsertTopic(info)
 				continue
