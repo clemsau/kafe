@@ -3,6 +3,7 @@ package topics
 import (
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/clemsau/kafe/internal/kafka"
@@ -21,10 +22,12 @@ type Table struct {
 	cache      *models.TopicCache
 	updateChan chan []models.TopicInfo
 	headers    []string
+	searchBar  *SearchBar
+	layout     *tview.Flex
 }
 
 // NewTable creates a new topics table
-func NewTable(app *ui.App, client *kafka.Client, cache *models.TopicCache) *Table {
+func NewTable(app *ui.App, client *kafka.Client, cache *models.TopicCache) *tview.Flex {
 	table := &Table{
 		Table:      tview.NewTable().SetSelectable(true, false),
 		app:        app,
@@ -41,9 +44,16 @@ func NewTable(app *ui.App, client *kafka.Client, cache *models.TopicCache) *Tabl
 		},
 	}
 
+	table.searchBar = NewSearchBar(table)
+
+	table.layout = tview.NewFlex().
+		SetDirection(tview.FlexRow).
+		AddItem(table.searchBar, 3, 0, false).
+		AddItem(table, 0, 1, true)
+
 	table.SetupUI()
 	table.StartMonitoring()
-	return table
+	return table.layout
 }
 
 // SetupUI initializes the table UI
@@ -186,6 +196,34 @@ func (t *Table) monitorTopics() {
 			t.cache.UpsertTopic(cachedInfo)
 		}
 
+		filterText := t.searchBar.GetFilterText()
+		if filterText != "" {
+			filtered := make([]models.TopicInfo, 0)
+			for _, topic := range t.cache.GetSortedTopics() {
+				if strings.Contains(strings.ToLower(topic.Name), strings.ToLower(filterText)) {
+					filtered = append(filtered, topic)
+				}
+			}
+			t.updateChan <- filtered
+			continue
+		}
 		t.updateChan <- t.cache.GetSortedTopics()
 	}
+}
+
+// ApplyFilter filters the table based on search text
+func (t *Table) ApplyFilter(filterText string) {
+	topics := t.cache.GetSortedTopics()
+	if filterText == "" {
+		t.UpdateTable(topics)
+		return
+	}
+
+	filtered := make([]models.TopicInfo, 0)
+	for _, topic := range topics {
+		if strings.Contains(strings.ToLower(topic.Name), strings.ToLower(filterText)) {
+			filtered = append(filtered, topic)
+		}
+	}
+	t.UpdateTable(filtered)
 }

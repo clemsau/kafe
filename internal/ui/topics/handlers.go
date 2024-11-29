@@ -18,15 +18,17 @@ func NewTopicTableHandler(table *Table) *TopicTableHandler {
 
 // Handle processes keyboard events for the topics table
 func (h *TopicTableHandler) Handle(event *tcell.EventKey) *tcell.EventKey {
-	table := h.table.Table
-	rowCount := table.GetRowCount()
-
 	switch event.Key() {
+	case tcell.KeyRune:
+		if event.Rune() == '/' {
+			h.table.searchBar.Activate()
+			return nil
+		}
 	case tcell.KeyHome:
-		table.Select(1, 0)
+		h.table.Table.Select(1, 0)
 		return nil
 	case tcell.KeyEnd:
-		table.Select(rowCount-1, 0)
+		h.table.Table.Select(h.table.Table.GetRowCount()-1, 0)
 		return nil
 	}
 

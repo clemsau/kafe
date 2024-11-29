@@ -19,9 +19,9 @@ func main() {
 	cache := models.NewTopicCache()
 
 	app := ui.NewApp()
-	table := topics.NewTable(app, client, cache)
+	layout := topics.NewTable(app, client, cache)
 
-	app.AddPage("topics", table, true)
+	app.AddPage("topics", layout, true)
 
 	app.SetGlobalInputHandler(app.DefaultGlobalHandler)
 
