@@ -1,13 +1,17 @@
-# kafe
+# Kafe
 
 Kafe is a TUI tool which helps observe and manage Kafka clusters.
 
+<img src="assets/kafe_listing.png" width="100%" alt="Kafe listing">
+
 ## Features
 
-- [ ] Topic management
-  - [ ] Listing topics
+- [ ] Cluster`s topics listing
+  - [x] Table view of the
+  - [x] Search by topic name
   - [ ] Viewing partition details
   - [ ] Leader/follower status
+- [ ] Topic management
 - [ ] Message inspection
   - [ ] Peak at messages in the topic
   - [ ] Filter
@@ -37,3 +41,17 @@ Kafe is a TUI tool which helps observe and manage Kafka clusters.
 - Some standards warnings could be raised for certain topics for irrational behaviors (maybe let's do this in another tab). For example:
   - A topic with a single partition (which is a dangerous configuration)
   - Consumer group that is lagging only on a subset of partitions
+
+## Details
+
+The statuses are:
+
+- "Ready" - This indicates a healthy topic where:
+  - All partitions have an active leader
+  - All partitions have their expected in-sync replicas (ISR)
+- "Warning" - This status appears when:
+  - The topic has a leader for its partitions
+  - But there are issues with the in-sync replicas (ISR) - either they're missing or there's an error accessing them
+- "Error" - This is the most severe status, occurring when:
+  - There's no leader for one or more partitions
+  - Or there's an error trying to get the leader information
