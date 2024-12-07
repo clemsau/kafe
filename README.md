@@ -2,18 +2,26 @@
 
 Kafe is a TUI tool which helps observe and manage Kafka clusters.
 
-<img src="assets/kafe_listing.png" width="100%" alt="Kafe listing">
-
 ## Features
 
-- [ ] Cluster`s topics listing
-  - [x] Table view of the
+Topics listing:
+
+<img src="assets/kafe_listing.png" width="100%" alt="Kafe listing">
+
+Peaking at messages:
+
+<img src="assets/kafe_messages.png" width="100%" alt="Kafe messages">
+
+## Development
+
+- [ ] Cluster's topics listing
+  - [x] Table view of the cluster's topics
   - [x] Search by topic name
   - [ ] Viewing partition details
   - [ ] Leader/follower status
 - [ ] Topic management
 - [ ] Message inspection
-  - [ ] Peak at messages in the topic
+  - [x] Peak at messages in the topic
   - [ ] Filter
 - [ ] Consumer group monitoring
   - [ ] List consumer groups

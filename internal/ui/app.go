@@ -27,6 +27,11 @@ func (a *App) AddPage(name string, item tview.Primitive, resize bool) {
 	a.pages.AddPage(name, item, true, true)
 }
 
+// RemovePage removes a page from the application
+func (a *App) RemovePage(name string) {
+	a.pages.RemovePage(name)
+}
+
 // SetGlobalInputHandler sets up global keyboard shortcuts
 func (a *App) SetGlobalInputHandler(handler func(*tcell.EventKey) *tcell.EventKey) {
 	a.Application.SetInputCapture(handler)

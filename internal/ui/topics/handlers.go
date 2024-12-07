@@ -1,6 +1,8 @@
 package topics
 
 import (
+	"github.com/clemsau/kafe/internal/ui/dialog"
+	"github.com/clemsau/kafe/internal/ui/messages"
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -23,6 +25,18 @@ func (h *TopicTableHandler) Handle(event *tcell.EventKey) *tcell.EventKey {
 		if event.Rune() == '/' {
 			h.table.searchBar.Activate()
 			return nil
+		}
+	case tcell.KeyEnter:
+		selectedRow, _ := h.table.GetSelection()
+		if selectedRow > 0 {
+			topic := h.table.GetCell(selectedRow, 0).Text
+			viewer := messages.NewMessageViewer(h.table.app, h.table.client, topic)
+			h.table.app.AddPage("messages", viewer, true)
+			if err := viewer.Start(); err != nil {
+				dialog.ShowError(h.table.app, err.Error())
+				h.table.app.RemovePage("messages")
+				return event
+			}
 		}
 	case tcell.KeyHome:
 		h.table.Table.Select(1, 0)

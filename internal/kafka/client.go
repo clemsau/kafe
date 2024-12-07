@@ -10,6 +10,7 @@ import (
 
 type Client struct {
 	sarama.Client
+	addresses []string
 }
 
 func NewClient(brokers []string, config *sarama.Config) (*Client, error) {
@@ -23,7 +24,14 @@ func NewClient(brokers []string, config *sarama.Config) (*Client, error) {
 		return nil, fmt.Errorf("failed to create Kafka client: %w", err)
 	}
 
-	return &Client{client}, nil
+	return &Client{
+		Client:    client,
+		addresses: brokers,
+	}, nil
+}
+
+func (c *Client) GetAddresses() []string {
+	return c.addresses
 }
 
 func (c *Client) GetTopicInfo(topic string) (models.TopicInfo, error) {
