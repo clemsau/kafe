@@ -14,3 +14,16 @@ func GetStatusColor(status string) tcell.Color {
 		return tcell.ColorWhite
 	}
 }
+
+func GetConsumerGroupStatusColor(status string) tcell.Color {
+	switch status {
+	case "Active":
+		return tcell.ColorGreen
+	case "Lagging":
+		return tcell.ColorYellow
+	case "Dead":
+		return tcell.ColorRed
+	default:
+		return tcell.ColorWhite
+	}
+}

@@ -59,7 +59,7 @@ func NewTable(app *ui.App, client *kafka.Client, cache *models.TopicCache) *tvie
 // SetupUI initializes the table UI
 func (t *Table) SetupUI() {
 	t.SetBorder(true).
-		SetTitle("Kafka Topics").
+		SetTitle("Topics").
 		SetTitleAlign(tview.AlignLeft)
 
 	// Set up headers

@@ -5,9 +5,13 @@ You can spin up a kafka cluster with the docker-compose.yaml file by running `do
 You can then start a consumer with:
 
 ```bash
-kafka-console-consumer --bootstrap-server broker:9092 \
-                       --topic example-topic \
-                       --from-beginning
+docker exec -it broker kafka-console-consumer --bootstrap-server localhost:9092 --topic new_topic --from-beginning
+```
+
+Or do it with a consumer group:
+
+```bash
+docker exec -it broker kafka-console-consumer --bootstrap-server localhost:9092 --topic new_topic --group new_group --from-beginning
 ```
 
 Create a new topic in the cluster with:

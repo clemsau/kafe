@@ -12,6 +12,10 @@ Peaking at messages:
 
 <img src="assets/kafe_messages.png" width="100%" alt="Kafe messages">
 
+Consumer groups listing:
+
+<img src="assets/kafe_consumer_groups.png" width="100%" alt="Kafe consumer groups">
+
 ## Development
 
 - [ ] Cluster's topics listing
@@ -24,8 +28,10 @@ Peaking at messages:
   - [x] Peak at messages in the topic
   - [ ] Filter
 - [ ] Consumer group monitoring
-  - [ ] List consumer groups
-  - [ ] Track offsets and lag perpartition
+  - [x] List consumer groups
+  - [x] Track offsets
+  - [ ] Partitions assignment
+  - [ ] Uneven partition assignment or lag
 - [ ] Broker health
   - [ ] Monitor brokers health
   - [ ] Performances

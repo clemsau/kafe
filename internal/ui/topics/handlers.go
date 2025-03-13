@@ -1,6 +1,7 @@
 package topics
 
 import (
+	"github.com/clemsau/kafe/internal/ui/consumer_groups"
 	"github.com/clemsau/kafe/internal/ui/dialog"
 	"github.com/clemsau/kafe/internal/ui/messages"
 	"github.com/gdamore/tcell/v2"
@@ -22,8 +23,17 @@ func NewTopicTableHandler(table *Table) *TopicTableHandler {
 func (h *TopicTableHandler) Handle(event *tcell.EventKey) *tcell.EventKey {
 	switch event.Key() {
 	case tcell.KeyRune:
-		if event.Rune() == '/' {
+		switch event.Rune() {
+		case '/':
 			h.table.searchBar.Activate()
+			return nil
+		case 'g':
+			selectedRow, _ := h.table.GetSelection()
+			if selectedRow > 0 {
+				topic := h.table.GetCell(selectedRow, 0).Text
+				viewer := consumer_groups.NewGroupViewer(h.table.app, h.table.client, topic)
+				h.table.app.AddPage("consumer-groups", viewer, true)
+			}
 			return nil
 		}
 	case tcell.KeyEnter:
