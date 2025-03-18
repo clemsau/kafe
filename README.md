@@ -8,7 +8,7 @@ Topics listing:
 
 <img src="assets/kafe_listing.png" width="100%" alt="Kafe listing">
 
-Peaking at messages:
+Peeking at messages:
 
 <img src="assets/kafe_messages.png" width="100%" alt="Kafe messages">
 
