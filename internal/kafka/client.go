@@ -87,7 +87,6 @@ func (c *Client) GetConsumerGroups(topic string) ([]models.ConsumerGroupInfo, er
 	var result []models.ConsumerGroupInfo
 
 	for group := range resp.Groups {
-		// Get group metadata using consumer API
 		greq := &sarama.DescribeGroupsRequest{
 			Groups: []string{group},
 		}
@@ -102,7 +101,6 @@ func (c *Client) GetConsumerGroups(topic string) ([]models.ConsumerGroupInfo, er
 
 		gdesc := gresp.Groups[0]
 
-		// Check if group is consuming our topic
 		consuming := false
 		members := 0
 		for _, member := range gdesc.Members {
@@ -124,12 +122,10 @@ func (c *Client) GetConsumerGroups(topic string) ([]models.ConsumerGroupInfo, er
 			continue
 		}
 
-		// Get offsets using regular consumer APIs
 		var totalLag int64
 		partitions := c.partitionsForTopic(topic)
 
 		for _, partition := range partitions {
-			// Get committed offset
 			offReq := &sarama.OffsetFetchRequest{
 				Version:       1,
 				ConsumerGroup: group,
@@ -153,7 +149,6 @@ func (c *Client) GetConsumerGroups(topic string) ([]models.ConsumerGroupInfo, er
 			}
 		}
 
-		// Determine status
 		status := "Active"
 		if gdesc.State == "Dead" {
 			status = "Dead"
