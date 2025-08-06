@@ -26,3 +26,7 @@ go.work.sum
 
 # VS Code
 .vscode/
+
+# Claude code
+.claude/
+CLAUDE.md
