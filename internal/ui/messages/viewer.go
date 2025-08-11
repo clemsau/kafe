@@ -10,23 +10,26 @@ import (
 	"github.com/IBM/sarama"
 	"github.com/clemsau/kafe/internal/kafka"
 	"github.com/clemsau/kafe/internal/ui"
+	"github.com/clemsau/kafe/internal/ui/controls"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
 
 type MessageViewer struct {
-	*tview.TextView
-	app       *ui.App
-	client    *kafka.Client
-	topic     string
-	consumers []sarama.PartitionConsumer
-	cancel    context.CancelFunc
-	mutex     sync.Mutex
+	*tview.Flex
+	textView    *tview.TextView
+	controlsBar *controls.ControlsBar
+	app         *ui.App
+	client      *kafka.Client
+	topic       string
+	consumers   []sarama.PartitionConsumer
+	cancel      context.CancelFunc
+	mutex       sync.Mutex
 }
 
 func NewMessageViewer(app *ui.App, client *kafka.Client, topic string) *MessageViewer {
 	mv := &MessageViewer{
-		TextView: tview.NewTextView().
+		textView: tview.NewTextView().
 			SetDynamicColors(true).
 			SetScrollable(true).
 			SetWrap(true),
@@ -35,12 +38,24 @@ func NewMessageViewer(app *ui.App, client *kafka.Client, topic string) *MessageV
 		topic:  topic,
 	}
 
+	mv.controlsBar = controls.NewControlsBar([]controls.Control{
+		{Key: "Esc", Description: "back to topics"},
+		{Key: "↑/↓", Description: "scroll"},
+		{Key: "q", Description: "quit"},
+	})
+
+	mv.Flex = tview.NewFlex().
+		SetDirection(tview.FlexRow).
+		AddItem(mv.controlsBar, 1, 0, false).
+		AddItem(tview.NewBox(), 1, 0, false).
+		AddItem(mv.textView, 0, 1, true)
+
 	mv.setupUI()
 	return mv
 }
 
 func (mv *MessageViewer) setupUI() {
-	mv.SetBorder(true).
+	mv.textView.SetBorder(true).
 		SetTitle(fmt.Sprintf(" Messages - %s ", mv.topic))
 
 	mv.SetInputCapture(mv.handleInput)
@@ -123,7 +138,7 @@ func (mv *MessageViewer) writeMessage(msg string, partition int32, err bool) {
 	}
 
 	mv.app.QueueUpdateDraw(func() {
-		fmt.Fprintf(mv.TextView, "[%s]%s [partition-%d][-] %s\n",
+		fmt.Fprintf(mv.textView, "[%s]%s [partition-%d][-] %s\n",
 			color,
 			time.Now().Format("15:04:05"),
 			partition,

@@ -9,6 +9,7 @@ import (
 	"github.com/clemsau/kafe/internal/kafka"
 	"github.com/clemsau/kafe/internal/models"
 	"github.com/clemsau/kafe/internal/ui"
+	"github.com/clemsau/kafe/internal/ui/controls"
 	"github.com/clemsau/kafe/internal/ui/utils"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
@@ -17,13 +18,14 @@ import (
 // Table represents the topics table view
 type Table struct {
 	*tview.Table
-	app        *ui.App
-	client     *kafka.Client
-	cache      *models.TopicCache
-	updateChan chan []models.TopicInfo
-	headers    []string
-	searchBar  *SearchBar
-	layout     *tview.Flex
+	app         *ui.App
+	client      *kafka.Client
+	cache       *models.TopicCache
+	updateChan  chan []models.TopicInfo
+	headers     []string
+	searchBar   *SearchBar
+	controlsBar *controls.ControlsBar
+	layout      *tview.Flex
 }
 
 // NewTable creates a new topics table
@@ -46,8 +48,18 @@ func NewTable(app *ui.App, client *kafka.Client, cache *models.TopicCache) *tvie
 
 	table.searchBar = NewSearchBar(table)
 
+	table.controlsBar = controls.NewControlsBar([]controls.Control{
+		{Key: "Enter", Description: "view messages"},
+		{Key: "g", Description: "consumer groups"},
+		{Key: "/", Description: "search"},
+		{Key: "Home/End", Description: "first/last"},
+		{Key: "q", Description: "quit"},
+	})
+
 	table.layout = tview.NewFlex().
 		SetDirection(tview.FlexRow).
+		AddItem(table.controlsBar, 1, 0, false).
+		AddItem(tview.NewBox(), 1, 0, false).
 		AddItem(table.searchBar, 3, 0, false).
 		AddItem(table, 0, 1, true)
 
