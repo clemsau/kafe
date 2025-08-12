@@ -11,20 +11,21 @@ import (
 	"github.com/clemsau/kafe/internal/kafka"
 	"github.com/clemsau/kafe/internal/ui"
 	"github.com/clemsau/kafe/internal/ui/controls"
+	"github.com/clemsau/kafe/internal/ui/topbar"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
 
 type MessageViewer struct {
 	*tview.Flex
-	textView    *tview.TextView
-	controlsBar *controls.ControlsBar
-	app         *ui.App
-	client      *kafka.Client
-	topic       string
-	consumers   []sarama.PartitionConsumer
-	cancel      context.CancelFunc
-	mutex       sync.Mutex
+	textView  *tview.TextView
+	topBar    *topbar.TopBar
+	app       *ui.App
+	client    *kafka.Client
+	topic     string
+	consumers []sarama.PartitionConsumer
+	cancel    context.CancelFunc
+	mutex     sync.Mutex
 }
 
 func NewMessageViewer(app *ui.App, client *kafka.Client, topic string) *MessageViewer {
@@ -38,15 +39,14 @@ func NewMessageViewer(app *ui.App, client *kafka.Client, topic string) *MessageV
 		topic:  topic,
 	}
 
-	mv.controlsBar = controls.NewControlsBar([]controls.Control{
+	mv.topBar = topbar.NewTopBar([]controls.Control{
 		{Key: "Esc", Description: "back to topics"},
-		{Key: "↑/↓", Description: "scroll"},
 		{Key: "q", Description: "quit"},
 	})
 
 	mv.Flex = tview.NewFlex().
 		SetDirection(tview.FlexRow).
-		AddItem(mv.controlsBar, 1, 0, false).
+		AddItem(mv.topBar, mv.topBar.GetHeight(), 0, false).
 		AddItem(tview.NewBox(), 1, 0, false).
 		AddItem(mv.textView, 0, 1, true)
 

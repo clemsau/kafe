@@ -69,3 +69,14 @@ The statuses are:
 - "Error" - This is the most severe status, occurring when:
   - There's no leader for one or more partitions
   - Or there's an error trying to get the leader information
+
+Kafe logo:
+
+```
+██╗  ██╗ █████╗ ███████╗███████╗
+██║ ██╔╝██╔══██╗██╔════╝██╔════╝
+█████╔╝ ███████║█████╗  █████╗  
+██╔═██╗ ██╔══██║██╔══╝  ██╔══╝  
+██║  ██╗██║  ██║██║     ███████╗
+╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚══════╝
+```

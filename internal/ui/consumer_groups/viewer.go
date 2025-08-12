@@ -9,6 +9,7 @@ import (
 	"github.com/clemsau/kafe/internal/models"
 	"github.com/clemsau/kafe/internal/ui"
 	"github.com/clemsau/kafe/internal/ui/controls"
+	"github.com/clemsau/kafe/internal/ui/topbar"
 	"github.com/clemsau/kafe/internal/ui/utils"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
@@ -16,15 +17,15 @@ import (
 
 type GroupViewer struct {
 	*tview.Table
-	app         *ui.App
-	client      *kafka.Client
-	topic       string
-	cache       *models.ConsumerGroupCache
-	updateChan  chan []models.ConsumerGroupInfo
-	headers     []string
-	searchBar   *tview.InputField
-	controlsBar *controls.ControlsBar
-	layout      *tview.Flex
+	app        *ui.App
+	client     *kafka.Client
+	topic      string
+	cache      *models.ConsumerGroupCache
+	updateChan chan []models.ConsumerGroupInfo
+	headers    []string
+	searchBar  *tview.InputField
+	topBar     *topbar.TopBar
+	layout     *tview.Flex
 }
 
 func NewGroupViewer(app *ui.App, client *kafka.Client, topic string) *tview.Flex {
@@ -65,16 +66,15 @@ func NewGroupViewer(app *ui.App, client *kafka.Client, topic string) *tview.Flex
 		return event
 	})
 
-	viewer.controlsBar = controls.NewControlsBar([]controls.Control{
+	viewer.topBar = topbar.NewTopBar([]controls.Control{
 		{Key: "Esc", Description: "back to topics"},
 		{Key: "/", Description: "search"},
-		{Key: "↑/↓", Description: "navigate"},
 		{Key: "q", Description: "quit"},
 	})
 
 	viewer.layout = tview.NewFlex().
 		SetDirection(tview.FlexRow).
-		AddItem(viewer.controlsBar, 1, 0, false).
+		AddItem(viewer.topBar, viewer.topBar.GetHeight(), 0, false).
 		AddItem(tview.NewBox(), 1, 0, false).
 		AddItem(viewer.searchBar, 3, 0, false).
 		AddItem(viewer, 0, 1, true)
