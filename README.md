@@ -1,6 +1,6 @@
 # Kafe
 
-Kafe is a TUI tool which helps observe and manage Kafka clusters.
+A TUI tool to observe and manage Kafka clusters.
 
 ## Features
 
