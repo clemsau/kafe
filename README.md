@@ -6,15 +6,15 @@ A TUI tool to observe and manage Kafka clusters.
 
 Topics listing:
 
-<img src="assets/kafe_listing.png" width="100%" alt="Kafe listing">
+<img src="assets/listing.png" width="100%" alt="Kafe listing">
 
 Peeking at messages:
 
-<img src="assets/kafe_messages.png" width="100%" alt="Kafe messages">
+<img src="assets/messages.png" width="100%" alt="Kafe messages">
 
 Consumer groups listing:
 
-<img src="assets/kafe_consumer_groups.png" width="100%" alt="Kafe consumer groups">
+<img src="assets/consumer_groups.png" width="100%" alt="Kafe consumer groups">
 
 ## Development
 
@@ -69,14 +69,3 @@ The statuses are:
 - "Error" - This is the most severe status, occurring when:
   - There's no leader for one or more partitions
   - Or there's an error trying to get the leader information
-
-Kafe logo:
-
-```
-██╗  ██╗ █████╗ ███████╗███████╗
-██║ ██╔╝██╔══██╗██╔════╝██╔════╝
-█████╔╝ ███████║█████╗  █████╗  
-██╔═██╗ ██╔══██║██╔══╝  ██╔══╝  
-██║  ██╗██║  ██║██║     ███████╗
-╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚══════╝
-```
